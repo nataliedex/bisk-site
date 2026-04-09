@@ -55,13 +55,13 @@ export default function HomePage() {
       <section className="pt-16 pb-16 sm:pt-20 md:pt-24 sm:pb-20">
         <div className="max-w-2xl mx-auto px-6 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 leading-[1.1]">
-            Stop overpaying for compounded medications.
+            Unlock better pricing through collective buying power.
           </h1>
           <p className="mt-3 text-xl sm:text-2xl font-medium text-gray-400 tracking-tight">
-            See exactly what you should be paying.
+            Keep more of what you earn.
           </p>
           <p className="mt-4 text-[15px] text-gray-500 max-w-lg mx-auto leading-relaxed">
-            Bisk connects you to vetted compounding pharmacies {"\u2014"} without changing how you operate.
+            Bisk helps med spas access negotiated rates from a network of trusted compounding pharmacies {"\u2014"} without changing how you operate.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <CheckCostsButton className="w-full sm:w-auto bg-gray-900 text-white rounded-lg px-8 py-4 text-[15px] font-semibold hover:bg-gray-800 transition-colors text-center cursor-pointer">
@@ -91,18 +91,18 @@ export default function HomePage() {
             {[
               {
                 step: "01",
-                title: "Enter your current costs",
-                description: "Tell us what you\u2019re paying per medication. It takes under a minute.",
+                title: "Share your current pricing",
+                description: "Upload your invoices or pricing sheet.",
               },
               {
                 step: "02",
-                title: "We benchmark your pricing",
-                description: "We compare every line item against our pharmacy network and find where you\u2019re overpaying.",
+                title: "We leverage our network pricing",
+                description: "We benchmark your costs against rates negotiated through our network.",
               },
               {
                 step: "03",
-                title: "Switch with zero disruption",
-                description: "Move to lower-cost sources at your pace. Same medications, same quality, better margins.",
+                title: "You access better pricing",
+                description: "Choose where it makes sense \u2014 no disruption required.",
               },
             ].map((item) => (
               <div key={item.step}>
@@ -127,24 +127,24 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                title: "Negotiated pharmacy rates",
-                description: "We aggregate purchasing power across dozens of med spas to negotiate costs you can\u2019t access alone.",
+                title: "Collective purchasing power",
+                description: "We aggregate demand across med spas to negotiate better pricing than you can access on your own.",
               },
               {
                 title: "Trusted pharmacy network",
-                description: "We source pricing from established compounding pharmacies so you get competitive, reliable options.",
+                description: "We work with established compounding pharmacies to deliver consistent, reliable pricing.",
               },
               {
-                title: "Simplified sourcing process",
-                description: "We help you compare options and access better pricing \u2014 without disrupting how you currently operate.",
+                title: "No disruption to your workflow",
+                description: "Access better pricing while continuing to order the way you do today.",
               },
               {
                 title: "Full margin visibility",
-                description: "See exactly what you pay, what you charge, and what you keep \u2014 per medication, per month.",
+                description: "Understand exactly what you\u2019re paying and what you\u2019re keeping \u2014 per medication, per month.",
               },
               {
-                title: "Built for GLP-1s + aesthetics",
-                description: "Semaglutide, Tirzepatide, peptides, topicals \u2014 not a generic GPO. Built for what you actually buy.",
+                title: "Built for med spa economics",
+                description: "Designed specifically for GLP-1s, peptides, and aesthetic medications \u2014 not a generic GPO.",
               },
             ].map((item) => (
               <div key={item.title} className="bg-white rounded-xl p-7 border border-gray-100">
@@ -208,7 +208,7 @@ export default function HomePage() {
       <section className="py-14 sm:py-20 border-y border-gray-100 bg-gray-50/50">
         <div className="max-w-2xl mx-auto px-6 text-center">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">See what you could be saving.</h2>
-          <p className="mt-3 text-gray-500 max-w-lg mx-auto">Enter your current medication costs and we{"\u2019"}ll show you exactly where your margins can improve.</p>
+          <p className="mt-3 text-gray-500 max-w-lg mx-auto">Share your current pricing and we{"\u2019"}ll show you how our network rates compare.</p>
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
             <CheckCostsButton className="w-full sm:w-auto bg-gray-900 text-white rounded-lg px-8 py-4 text-[15px] font-semibold hover:bg-gray-800 transition-colors text-center cursor-pointer">
               {CTA_LABEL}
@@ -248,7 +248,7 @@ export default function HomePage() {
             See exactly what you{"\u2019"}re overpaying.
           </h2>
           <p className="mt-4 text-lg text-gray-400 max-w-lg mx-auto leading-relaxed">
-            Enter your current costs and we{"\u2019"}ll benchmark you against our pharmacy network.
+            Share your current pricing and see how our negotiated network rates compare.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <CheckCostsButton className="w-full sm:w-auto bg-white text-gray-900 rounded-lg px-8 py-4 text-[15px] font-semibold hover:bg-gray-100 transition-colors text-center cursor-pointer">
