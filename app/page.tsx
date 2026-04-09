@@ -29,7 +29,7 @@ function fmt(n: number) {
 
 const CTA_LABEL = "Check My Costs";
 const CTA_SECONDARY = "Book a Call";
-const CTA_SECONDARY_HREF = "mailto:info@joinbisk.com?subject=Book%20a%20Call";
+const CTA_SECONDARY_HREF = `mailto:info@joinbisk.com?subject=${encodeURIComponent("Book a Call — Bisk")}&body=${encodeURIComponent("Hi Bisk,\n\nI'd like to book a call to learn more about your pricing and how Bisk works for med spas.\n\nName:\nCompany:\nBest phone number:\nBest time to reach me:")}`;
 
 export default function HomePage() {
   return (
@@ -131,12 +131,12 @@ export default function HomePage() {
                 description: "We aggregate purchasing power across dozens of med spas to negotiate costs you can\u2019t access alone.",
               },
               {
-                title: "Every pharmacy is vetted",
-                description: "Licensed, compliant, and quality-checked. We handle the diligence so you don\u2019t have to.",
+                title: "Trusted pharmacy network",
+                description: "We source pricing from established compounding pharmacies so you get competitive, reliable options.",
               },
               {
-                title: "One streamlined workflow",
-                description: "Replace multiple pharmacy vendors with a single, reliable ordering process.",
+                title: "Simplified sourcing process",
+                description: "We help you compare options and access better pricing \u2014 without disrupting how you currently operate.",
               },
               {
                 title: "Full margin visibility",
