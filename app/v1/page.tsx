@@ -9,14 +9,22 @@ export default function V1Page() {
     <div className="flex flex-col">
       {/* Nav */}
       <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between relative">
           <a href="/v1" className="text-xl font-bold tracking-tight text-gray-900">
             Bisk
           </a>
-          <div className="flex items-center gap-3">
-            <CheckCostsButton className="bg-gray-900 text-white rounded-lg px-5 py-2.5 text-sm font-semibold hover:bg-gray-800 transition-colors cursor-pointer">
-              {CTA_LABEL}
+          <div className="hidden sm:flex absolute left-1/2 -translate-x-1/2 items-center gap-7 text-sm font-medium text-gray-600">
+            <a href="#how-it-works" className="hover:text-gray-900 transition-colors">How it works</a>
+            <a href="#estimate-savings" className="hover:text-gray-900 transition-colors">Estimate savings</a>
+            <a href="#faq" className="hover:text-gray-900 transition-colors">FAQ</a>
+          </div>
+          <div className="flex items-center gap-2">
+            <CheckCostsButton className="border border-gray-200 text-gray-800 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-gray-50 transition-colors cursor-pointer">
+              Become a founding member
             </CheckCostsButton>
+            <button className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors text-gray-500 text-lg tracking-tighter leading-none" aria-label="More">
+              &middot;&middot;&middot;
+            </button>
           </div>
         </div>
       </nav>
@@ -24,12 +32,12 @@ export default function V1Page() {
       {/* Hero */}
       <section className="pt-16 pb-16 sm:pt-20 md:pt-24 sm:pb-20">
         <div className="max-w-2xl mx-auto px-6 text-center">
-          <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Group purchasing for med spas</p>
+          <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Group purchasing organization for med spas</p>
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 leading-[1.1]">
-            The negotiating power of a health system {"\u2014"} built for your med spa.
+            The negotiating power of a health system, built for your med spa.
           </h1>
           <p className="mt-5 text-[15px] text-gray-500 max-w-xl mx-auto leading-relaxed">
-            Bisk pools the purchasing volume of independent med spas to negotiate better rates with the same pharmacy partners used by the largest telehealth providers in the country.
+            Bisk GPO pools the purchasing volume of independent med spas to negotiate better rates with leading compounding pharmacies.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <CheckCostsButton className="w-full sm:w-auto bg-gray-900 text-white rounded-lg px-8 py-4 text-[15px] font-semibold hover:bg-gray-800 transition-colors text-center cursor-pointer">
@@ -48,7 +56,7 @@ export default function V1Page() {
       <div className="max-w-6xl mx-auto px-6 w-full"><div className="border-t border-gray-100" /></div>
 
       {/* How It Works */}
-      <section className="py-16 sm:py-24">
+      <section id="how-it-works" className="py-16 sm:py-24">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-14">
             <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider">How it works</p>
@@ -60,7 +68,7 @@ export default function V1Page() {
               {
                 step: "01",
                 title: "Share your current costs",
-                description: "Tell us what you\u2019re paying per medication. It takes under a minute and there\u2019s no obligation.",
+                description: "Tell us what you\u2019re paying per medication. It takes under a minute and there\u2019s no obligation to move forward.",
               },
               {
                 step: "02",
@@ -87,9 +95,9 @@ export default function V1Page() {
       <section className="py-16 sm:py-24 bg-gray-50">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 leading-tight">
-            Enterprise-grade pharmacy partners.
+            Large-scale pharmacy partners.
             <br />
-            Independent practice pricing.
+            Without the large-scale medical practice.
           </h2>
           <div className="mt-6 text-[15px] text-gray-500 leading-relaxed space-y-4 max-w-2xl mx-auto text-left">
             <p>
@@ -140,7 +148,7 @@ export default function V1Page() {
       </section>
 
       {/* Savings Estimator — Reframed */}
-      <section className="py-14 sm:py-20 border-y border-gray-100 bg-gray-50/50">
+      <section id="estimate-savings" className="py-14 sm:py-20 border-y border-gray-100 bg-gray-50/50">
         <div className="max-w-2xl mx-auto px-6 text-center">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">See what collective bargaining could save you.</h2>
           <p className="mt-3 text-gray-500 max-w-lg mx-auto">Enter your current medication costs and we{"\u2019"}ll show you where Bisk may be able to improve your pricing. We{"\u2019"}ll follow up with a real analysis.</p>
@@ -158,7 +166,7 @@ export default function V1Page() {
       </section>
 
       {/* FAQ */}
-      <section className="py-16 sm:py-24">
+      <section id="faq" className="py-16 sm:py-24">
         <div className="max-w-3xl mx-auto px-6">
           <div className="text-center mb-14">
             <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Questions</p>
@@ -208,7 +216,7 @@ export default function V1Page() {
             Better pricing starts with better leverage.
           </h2>
           <p className="mt-4 text-lg text-gray-400 max-w-lg mx-auto leading-relaxed">
-            Share your current costs and see how Bisk{"\u2019"}s network contracts compare. No pressure, no obligation.
+            Share your current costs and see how Bisk{"\u2019"}s network contracts compare. No pressure, no obligation to move forward.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <CheckCostsButton className="w-full sm:w-auto bg-white text-gray-900 rounded-lg px-8 py-4 text-[15px] font-semibold hover:bg-gray-100 transition-colors text-center cursor-pointer">

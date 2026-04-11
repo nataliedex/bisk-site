@@ -203,16 +203,61 @@ function formatPhone(value: string): string {
 }
 
 // =============================================
+// STEP INDICATOR
+// =============================================
+
+function StepIndicator({ step }: { step: 1 | 2 }) {
+  return (
+    <div className="flex items-center gap-2 mb-6">
+      {/* Step 1 */}
+      <div className="flex items-center gap-1.5">
+        <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${
+          step === 1 ? "bg-gray-900 text-white" : "bg-emerald-500 text-white"
+        }`}>
+          {step > 1 ? (
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <path d="M2 5l2.5 2.5L8 3" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          ) : "1"}
+        </div>
+        <span className={`text-xs font-medium ${step === 1 ? "text-gray-900" : "text-gray-400"}`}>
+          Your info
+        </span>
+      </div>
+
+      {/* Connector */}
+      <div className="flex-1 h-px bg-gray-200 mx-1" />
+
+      {/* Step 2 */}
+      <div className="flex items-center gap-1.5">
+        <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${
+          step === 2 ? "bg-gray-900 text-white" : "bg-gray-200 text-gray-400"
+        }`}>
+          2
+        </div>
+        <span className={`text-xs font-medium ${step === 2 ? "text-gray-900" : "text-gray-400"}`}>
+          Medication pricing
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// =============================================
 // MODAL COMPONENT
 // =============================================
 
 export function PricingModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [step, setStep] = useState<1 | 2>(1);
   const [lines, setLines] = useState<MedicationLine[]>(DEFAULT_MEDICATIONS.map((m) => ({ ...m })));
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [role, setRole] = useState("");
+  const [prescribers, setPrescribers] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   function updateLine(idx: number, field: keyof MedicationLine, value: string) {
     setLines((prev) => { const next = [...prev]; next[idx] = { ...next[idx], [field]: value }; return next; });
@@ -221,23 +266,27 @@ export function PricingModal({ open, onClose }: { open: boolean; onClose: () => 
   function addLine() { setLines((prev) => [...prev, { name: "", unit: "vial", price: "", qty: "" }]); }
 
   function reset() {
+    setStep(1);
     setLines(DEFAULT_MEDICATIONS.map((m) => ({ ...m })));
-    setName(""); setCompany(""); setEmail(""); setPhone("");
+    setName(""); setCompany(""); setEmail(""); setPhone(""); setRole(""); setPrescribers("");
     setSubmitting(false);
+    setSubmitted(false);
   }
 
   function handleClose() { onClose(); setTimeout(reset, 300); }
 
   // Build structured payload from form state
-  function buildPayload(): SubmissionPayload {
-    const filledMeds = lines
-      .filter((l) => l.name.trim() && l.price && parseFloat(l.price) > 0)
-      .map((l) => ({
-        name: l.name.trim(),
-        unit: l.unit,
-        unitPrice: parseFloat(l.price),
-        monthlyQty: parseInt(l.qty) || 1,
-      }));
+  function buildPayload(includeMeds = true): SubmissionPayload {
+    const filledMeds = includeMeds
+      ? lines
+          .filter((l) => l.name.trim() && l.price && parseFloat(l.price) > 0)
+          .map((l) => ({
+            name: l.name.trim(),
+            unit: l.unit,
+            unitPrice: parseFloat(l.price),
+            monthlyQty: parseInt(l.qty) || 1,
+          }))
+      : [];
 
     return {
       contact: { name: name.trim(), company: company.trim(), email: email.trim(), phone },
@@ -246,17 +295,18 @@ export function PricingModal({ open, onClose }: { open: boolean; onClose: () => 
     };
   }
 
-  const filledLines = lines.filter((l) => l.name.trim() && l.price && parseFloat(l.price) > 0);
-  const canSubmit = filledLines.length > 0 && name.trim() && email.trim();
+  const step1Valid = name.trim() !== "" && company.trim() !== "" && email.trim() !== "" && role !== "" && prescribers.trim() !== "";
 
-  async function handleSubmit() {
+  const filledLines = lines.filter((l) => l.name.trim() && l.price && parseFloat(l.price) > 0);
+  const canSubmit = name.trim() !== "" && email.trim() !== "";
+
+  async function handleSubmit(includeMeds = true) {
     if (!canSubmit || submitting) return;
     setSubmitting(true);
-    // Opens one mailto draft. We cannot detect if the user actually sends it,
-    // so we close the modal without showing a misleading success message.
-    const payload = buildPayload();
+    const payload = buildPayload(includeMeds);
     await submitPricing(payload);
-    handleClose();
+    setSubmitting(false);
+    setSubmitted(true);
   }
 
   if (!open) return null;
@@ -266,16 +316,117 @@ export function PricingModal({ open, onClose }: { open: boolean; onClose: () => 
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={handleClose} />
 
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-4 border-b border-gray-100">
-              <div className="flex items-start justify-between">
+
+        {/* ── Success screen ── */}
+        {submitted && (
+          <div className="px-6 sm:px-8 py-14 flex flex-col items-center text-center">
+            <div className="w-14 h-14 rounded-full bg-emerald-50 flex items-center justify-center mb-6">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <circle cx="14" cy="14" r="13" stroke="#2a7a4f" strokeWidth="1.6" />
+                <path d="M9 14l3.5 3.5L19 9.5" stroke="#2a7a4f" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <p className="text-[10px] font-semibold text-emerald-700 uppercase tracking-widest mb-2">Founding member</p>
+            <h2 className="text-xl font-bold text-gray-900 mb-3">Welcome to Bisk.</h2>
+            <p className="text-sm text-gray-500 leading-relaxed max-w-sm mb-8">
+              Thanks for joining — you&apos;re one of the first practices helping build this. We&apos;ll be in touch personally as soon as we have rates to share.
+            </p>
+            <button
+              onClick={handleClose}
+              className="bg-gray-900 text-white rounded-lg px-8 py-3 text-sm font-semibold hover:bg-gray-800 transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        )}
+
+        {/* ── Header + Steps ── */}
+        {!submitted && (
+          <>
+        <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-5 border-b border-gray-100">
+          <div className="flex items-start justify-between mb-5">
+            <div>
+              <h2 className="text-lg font-bold text-gray-900">
+                {step === 1 ? "Let\u2019s get you in the group." : "What are you currently paying?"}
+              </h2>
+              <p className="mt-1 text-sm text-gray-500">
+                {step === 1
+                  ? "We\u2019ll reach out once we have negotiated rates to share."
+                  : "We\u2019ll use this to build a custom comparison. Optional \u2014 but the more detail, the better."}
+              </p>
+            </div>
+            <button onClick={handleClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none p-1 -mt-1 flex-shrink-0">&times;</button>
+          </div>
+          <StepIndicator step={step} />
+        </div>
+
+        {/* ── Step 1: Your info ── */}
+        {step === 1 && (
+          <>
+            <div className="px-6 sm:px-8 py-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900">Enter your current medication pricing</h2>
-                  <p className="mt-1 text-sm text-gray-500">We{"\u2019"}ll review your pricing and follow up with a custom comparison.</p>
+                  <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                    Your name <span className="text-red-400">*</span>
+                  </label>
+                  <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" className={inputClass} />
                 </div>
-                <button onClick={handleClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none p-1 -mt-1">&times;</button>
+                <div>
+                  <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                    Practice name <span className="text-red-400">*</span>
+                  </label>
+                  <input type="text" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Practice or company name" className={inputClass} />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                    Email <span className="text-red-400">*</span>
+                  </label>
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@yourmedspa.com" className={inputClass} />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                    Phone <span className="text-gray-300">(optional)</span>
+                  </label>
+                  <input type="tel" value={phone} onChange={(e) => setPhone(formatPhone(e.target.value))} placeholder="(555) 555-5555" className={inputClass} />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                    Your role <span className="text-red-400">*</span>
+                  </label>
+                  <input type="text" value={role} onChange={(e) => setRole(e.target.value)} placeholder="e.g. Owner, NP, RN, MA, PA, Manager" className={inputClass} />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                    Number of prescribers <span className="text-red-400">*</span>
+                  </label>
+                  <input type="number" min="1" value={prescribers} onChange={(e) => setPrescribers(e.target.value)} placeholder="1" className={inputClass} />
+                </div>
               </div>
             </div>
 
+            <div className="px-6 sm:px-8 py-5 border-t border-gray-100">
+              <div className="flex flex-col sm:flex-row items-center gap-3">
+                <button
+                  onClick={() => { if (step1Valid) setStep(2); }}
+                  disabled={!step1Valid}
+                  className="w-full sm:w-auto bg-gray-900 text-white rounded-lg px-8 py-3.5 text-[15px] font-semibold hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-center"
+                >
+                  Continue &rarr;
+                </button>
+                <button
+                  onClick={handleClose}
+                  className="w-full sm:w-auto text-sm text-gray-500 hover:text-gray-700 transition-colors text-center py-2"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* ── Step 2: Medication pricing ── */}
+        {step === 2 && (
+          <>
             <div className="px-6 sm:px-8 py-5 space-y-5">
               {/* Medication rows */}
               <div>
@@ -316,44 +467,39 @@ export function PricingModal({ open, onClose }: { open: boolean; onClose: () => 
                   + Add medication
                 </button>
               </div>
-
-              <div className="border-t border-gray-100" />
-
-              {/* Contact fields */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Name <span className="text-red-400">*</span></label>
-                  <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" className={inputClass} />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Company</label>
-                  <input type="text" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Practice or company name" className={inputClass} />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Email <span className="text-red-400">*</span></label>
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@yourmedspa.com" className={inputClass} />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Phone</label>
-                  <input type="tel" value={phone} onChange={(e) => setPhone(formatPhone(e.target.value))} placeholder="(555) 555-5555" className={inputClass} />
-                </div>
-              </div>
             </div>
 
-            {/* Actions */}
             <div className="px-6 sm:px-8 py-5 border-t border-gray-100">
               <div className="flex flex-col sm:flex-row items-center gap-3">
-                <button onClick={handleSubmit} disabled={!canSubmit || submitting}
-                  className="w-full sm:w-auto bg-gray-900 text-white rounded-lg px-8 py-3.5 text-[15px] font-semibold hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-center">
-                  {submitting ? "Submitting..." : "Submit Pricing"}
+                <button
+                  onClick={() => handleSubmit(true)}
+                  disabled={!canSubmit || submitting}
+                  className="w-full sm:w-auto bg-gray-900 text-white rounded-lg px-8 py-3.5 text-[15px] font-semibold hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-center"
+                >
+                  {submitting ? "Submitting..." : "Submit pricing"}
                 </button>
-                <button onClick={handleClose}
-                  className="w-full sm:w-auto text-sm text-gray-500 hover:text-gray-700 transition-colors text-center py-2">
-                  Cancel
+                <button
+                  onClick={() => setStep(1)}
+                  className="w-full sm:w-auto text-sm text-gray-500 hover:text-gray-700 transition-colors text-center py-2"
+                >
+                  &larr; Back
                 </button>
               </div>
+              <button
+                onClick={() => handleSubmit(false)}
+                disabled={!canSubmit || submitting}
+                className="mt-3 text-xs text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Skip this step
+              </button>
               <p className="mt-3 text-xs text-gray-400">A member of our team will review this and reach out.</p>
             </div>
+          </>
+        )}
+
+          </>
+        )}
+
       </div>
     </div>
   );
