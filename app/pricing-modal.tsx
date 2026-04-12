@@ -188,9 +188,12 @@ const UNITS = ["vial", "tube", "capsule", "tablet", "bottle", "syringe", "kit"];
 const DEFAULT_MEDICATIONS: MedicationLine[] = [
   { name: "Semaglutide", unit: "vial", price: "", qty: "" },
   { name: "Tirzepatide", unit: "vial", price: "", qty: "" },
-  { name: "Tretinoin Cream", unit: "tube", price: "", qty: "" },
-  { name: "NAD+ Nasal Spray", unit: "bottle", price: "", qty: "" },
+  { name: "Testosterone Cypionate", unit: "vial", price: "", qty: "" },
+  { name: "Sermorelin", unit: "vial", price: "", qty: "" },
+  { name: "Progesterone", unit: "capsule", price: "", qty: "" },
+  { name: "NAD+", unit: "vial", price: "", qty: "" },
   { name: "Glutathione", unit: "vial", price: "", qty: "" },
+  { name: "Tretinoin Cream", unit: "tube", price: "", qty: "" },
 ];
 
 const inputClass = "w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-gray-900 focus:border-gray-900 outline-none transition-shadow";
@@ -313,7 +316,7 @@ export function PricingModal({ open, onClose }: { open: boolean; onClose: () => 
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={handleClose} />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
 
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 
@@ -399,7 +402,7 @@ export function PricingModal({ open, onClose }: { open: boolean; onClose: () => 
                   <label className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
                     Number of prescribers <span className="text-red-400">*</span>
                   </label>
-                  <input type="number" min="1" value={prescribers} onChange={(e) => setPrescribers(e.target.value)} placeholder="1" className={inputClass} />
+                  <input type="number" min="1" value={prescribers} onChange={(e) => setPrescribers(e.target.value)} placeholder="0" className={inputClass} />
                 </div>
               </div>
             </div>
