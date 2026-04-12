@@ -489,7 +489,7 @@ export function PricingModal({ open, onClose }: { open: boolean; onClose: () => 
                 </button>
               </div>
               <button
-                onClick={() => handleSubmit(false)}
+                onClick={() => setSubmitted(true)}
                 disabled={!canSubmit || submitting}
                 className="mt-3 text-xs text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
